@@ -73,7 +73,6 @@ window.showModal = (title, message, isAlert = false, confirmText = "Confirmar", 
         
         customModal.classList.remove('hidden'); setTimeout(() => customModal.classList.add('show'), 10); 
 
-        // Guardamos as referências corretas das funções para conseguir removê-las depois
         const handleConfirm = () => cleanup(true);
         const handleCancel = () => cleanup(false);
 
@@ -83,7 +82,6 @@ window.showModal = (title, message, isAlert = false, confirmText = "Confirmar", 
             btnCancel.removeEventListener('click', handleCancel);
             resolve(result);
         };
-
         btnConfirm.addEventListener('click', handleConfirm); 
         btnCancel.addEventListener('click', handleCancel);
     });
@@ -112,14 +110,11 @@ document.getElementById('logout-app-btn')?.addEventListener('click', async () =>
     }
 });
 
-// 🧠 NOVO: Lógica para mudar o tamanho da fonte de verdade!
 const fontSizeSlider = document.querySelector('#settings-modal input[type="range"]');
 const fontSizeDisplay = document.querySelector('#settings-modal span');
-
 fontSizeSlider?.addEventListener('input', (e) => {
     const value = e.target.value;
     if(fontSizeDisplay) fontSizeDisplay.textContent = value + "%";
-    // Altera o tamanho base da fonte do HTML proporcionalmente
     document.documentElement.style.fontSize = `${(value / 100) * 16}px`;
 });
 
