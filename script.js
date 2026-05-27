@@ -73,12 +73,19 @@ window.showModal = (title, message, isAlert = false, confirmText = "Confirmar", 
         
         customModal.classList.remove('hidden'); setTimeout(() => customModal.classList.add('show'), 10); 
 
+        // Guardamos as referências corretas das funções para conseguir removê-las depois
+        const handleConfirm = () => cleanup(true);
+        const handleCancel = () => cleanup(false);
+
         const cleanup = (result) => {
             customModal.classList.remove('show'); setTimeout(() => customModal.classList.add('hidden'), 300); 
-            btnConfirm.removeEventListener('click', onConfirm); btnCancel.removeEventListener('click', onCancel);
+            btnConfirm.removeEventListener('click', handleConfirm); 
+            btnCancel.removeEventListener('click', handleCancel);
             resolve(result);
         };
-        btnConfirm.addEventListener('click', () => cleanup(true)); btnCancel.addEventListener('click', () => cleanup(false));
+
+        btnConfirm.addEventListener('click', handleConfirm); 
+        btnCancel.addEventListener('click', handleCancel);
     });
 };
 
@@ -103,6 +110,17 @@ document.getElementById('logout-app-btn')?.addEventListener('click', async () =>
         settingsModal.classList.remove('show'); setTimeout(() => settingsModal.classList.add('hidden'), 300);
         try { await signOut(auth); } catch(e) {} window.location.reload(); 
     }
+});
+
+// 🧠 NOVO: Lógica para mudar o tamanho da fonte de verdade!
+const fontSizeSlider = document.querySelector('#settings-modal input[type="range"]');
+const fontSizeDisplay = document.querySelector('#settings-modal span');
+
+fontSizeSlider?.addEventListener('input', (e) => {
+    const value = e.target.value;
+    if(fontSizeDisplay) fontSizeDisplay.textContent = value + "%";
+    // Altera o tamanho base da fonte do HTML proporcionalmente
+    document.documentElement.style.fontSize = `${(value / 100) * 16}px`;
 });
 
 // ==========================================
